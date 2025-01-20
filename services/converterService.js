@@ -45,19 +45,30 @@ class ConverterService {
         return;
       }
 
-      // Handle numbered lists
+      // For numbered lists, map to array of objects
       if (/^\d+\./.test(line)) {
         const [number, ...content] = line.split('.');
         const sectionContent = content.join('.').trim();
 
         if (currentSection) {
-          if (!sections[currentSection].items) {
-            sections[currentSection] = { items: [] };
+          if (!Array.isArray(sections[currentSection])) {
+            sections[currentSection] = [];
           }
-          sections[currentSection].items.push({
+          sections[currentSection].push({
             number: parseInt(number),
             content: sectionContent
           });
+        }
+        return;
+      }
+
+      // For bulleted lists (- or *), map to array of strings
+      if (line.startsWith('-') || line.startsWith('*')) {
+        if (currentSection) {
+          if (!Array.isArray(sections[currentSection])) {
+            sections[currentSection] = [];
+          }
+          sections[currentSection].push(line.substring(1).trim());
         }
         return;
       }
