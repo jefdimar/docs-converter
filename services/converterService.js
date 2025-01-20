@@ -29,7 +29,7 @@ class ConverterService {
         } else {
           // If no value, it's a section header
           currentSection = cleanKey;
-          sections[currentSection] = {};
+          sections[currentSection] = "";
         }
         return;
       }
